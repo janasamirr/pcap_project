@@ -85,7 +85,7 @@ class pcapParser
     }
 
   //pass arg by reference to avoid copying the entire thing
-  bool writePacket(const Packet& data,const Packet& timeStamp)
+  void writePacket(const Packet& data,const Packet& timeStamp)
   {
     
     PacketHeader header;
