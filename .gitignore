@@ -1,0 +1,64 @@
+# ======================
+# C++ Build Artifacts
+# ======================
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+*.a
+*.lib
+*.lo
+*.la
+*.dep
+
+# ======================
+# Build Directories
+# ======================
+build/
+bin/
+dist/
+Debug/
+Release/
+
+# ======================
+# IDE / Editor Files
+# ======================
+
+# VS Code
+.vscode/
+
+# CLion / JetBrains
+.idea/
+cmake-build-*/
+
+# Visual Studio
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+*.user
+*.suo
+*.pdb
+ipch/
+*.idb
+*.obj
+
+# ======================
+# OS / System Files
+# ======================
+.DS_Store       # macOS Finder
+Thumbs.db       # Windows Explorer
+ehthumbs.db
+desktop.ini
+
+# ======================
+# Logs / Temp Files
+# ======================
+*.log
+*.tmp
+*.swp
+*.bak
+*.old
