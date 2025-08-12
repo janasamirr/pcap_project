@@ -11,10 +11,10 @@ struct FileHeader
 
     public:
         FileHeader(uint32_t magic = 0xa1b2c3d4,
-               uint16_t major = 2,
-               uint16_t minor = 4,
-               uint32_t snapLen = 65535,
-               uint32_t link = 1);
+           uint16_t major = 2,
+           uint16_t minor = 4,
+           uint32_t snapLen = 65535,
+           uint32_t link = 1);
         uint32_t getMagicNumber() const;
         uint16_t getMajorVersion() const;
         uint16_t getMinorVersion() const;

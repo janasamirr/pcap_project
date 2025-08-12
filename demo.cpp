@@ -118,5 +118,5 @@ int main()
     out.close();
     return 0;
 
-    //std::cout << "HI" << std::endl;
+    std::cout << "HI" << std::endl;
 }

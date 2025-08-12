@@ -1,12 +1,15 @@
 #include "FileHeader.h"
 
-    FileHeader::FileHeader(uint32_t magic = 0xa1b2c3d4,
-               uint16_t major = 2,
-               uint16_t minor = 4,
-               uint32_t snapLen = 65535,
-               uint32_t link = 1)
-               {
-               }
+    FileHeader::FileHeader(uint32_t magic,
+                       uint16_t major,
+                       uint16_t minor,
+                       uint32_t snapLen,
+                       uint32_t link)
+    : magicNumber(magic),
+      majorV(major),
+      minorV(minor),
+      snapLength(snapLen),
+      linkType(link) {}
     uint32_t FileHeader:: getMagicNumber() const
         {
             return magicNumber;
