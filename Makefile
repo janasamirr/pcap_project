@@ -1,10 +1,26 @@
-all: demo
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall
 
-build:
-	g++ demo.cpp -std=c++17
+TARGET = demo
+SRCS = demo.cpp TimeStamp.cpp PacketRecord.cpp PcapParser.cpp
+OBJS = demo.o TimeStamp.o PacketRecord.o PcapParser.o
 
-run:
-	./a.exe
+all: $(TARGET)
 
-demo: demo.cpp FileHeader.cpp PacketHeader.cpp
-    g++ demo.cpp FileHeader.cpp PacketHeader.cpp -std=c++17 -o demo
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
+
+demo.o: demo.cpp
+	$(CXX) $(CXXFLAGS) -c demo.cpp
+
+TimeStamp.o: TimeStamp.cpp
+	$(CXX) $(CXXFLAGS) -c TimeStamp.cpp
+
+PacketRecord.o: PacketRecord.cpp
+	$(CXX) $(CXXFLAGS) -c PacketRecord.cpp
+
+PcapParser.o: PcapParser.cpp
+	$(CXX) $(CXXFLAGS) -c PcapParser.cpp
+
+clean:
+	del $(OBJS) $(TARGET).exe

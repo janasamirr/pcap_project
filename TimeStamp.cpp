@@ -1,13 +1,9 @@
 #include "TimeStamp.h"
 
-TimeStamp::TimeStamp(TimeStampType t, uint32_t s, uint32_t us)
-    : type(t), seconds(s), accuracy(us)
+TimeStamp::TimeStamp( uint32_t s, uint32_t us)
+    :  seconds(s), accuracy(us)
 {
 }
-TimeStampType TimeStamp::getType() const {
-    return type;
-}
-
 uint32_t TimeStamp::getSeconds() const {
     return seconds;
 }

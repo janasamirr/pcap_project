@@ -1,25 +1,32 @@
 #include <fstream>
 #include <string>
 #include <cstdint>
-#include "Packet.h"       // for Packet class
-#include "PacketHeader.h" // for PacketHeader struct
-#include "TimeStamp.h"// for TimeStampType enum
-#include "FileHeader.h"
+#include "PacketRecord.h"
+#include "TimeStamp.h"
+
 using namespace std;
 
 class PcapParser {
-private:
-    fstream fileStream;
-    string fileName;
-    bool isLittleEndian;
-public:
-    // Constructor
-    PcapParser(const string& file, bool littleEndian);
+    public:
+        enum TimeStampType{nano,micro};
 
-    // Getter
-    bool getIsLittleEndian() const;
-    // Writes a packet to the pcap file
-    void writePacket(const Packet& data, const TimeStamp& ts);
+    private:
+        uint32_t magicNumber=0xA1B2C3D4; //little endian, seconds and microseconds
+        uint16_t majorV=2;
+        uint16_t minorV=4;
+        const uint32_t r1=0;
+        const uint32_t r2=0;
+        uint32_t snapLength=65535; //max length per packet
+        uint32_t linkType=1;  //1 means ethernet which is the most common
+        fstream fileStream;
+        string fileName;
+        TimeStampType type;
+        bool isLittleEndian;
+
+    public:
+        PcapParser(TimeStampType type, string fileName, bool endian);
+        void writePacket(const PacketRecord p);
+        vector<PacketRecord> readPacket(const string& fileName);
 };
 
 
