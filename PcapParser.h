@@ -25,8 +25,9 @@ class PcapParser {
 
     public:
         PcapParser(TimeStampType type, string fileName, bool endian);
-        void writePacket(const PacketRecord p);
-        vector<PacketRecord> readPacket(const string& fileName);
+        PcapParser(string fileName);
+        void writePacket(const PacketRecord& p);
+        vector<PacketRecord> readPcapFile();
 };
 
 

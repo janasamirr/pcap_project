@@ -3,7 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <cstdint>
-#include <filesystem>
+#include <iomanip>
 #include "PcapParser.h"
 #include "TimeStamp.h"
 #include "PacketRecord.h"
@@ -19,13 +19,31 @@ int main()
     PacketRecord p1( ts1,sizeof(data1), (char*)data1);
     PacketRecord p2( ts2,sizeof(data2), (char*)data2);
     vector<PacketRecord> originalPackets = {p1, p2};
-    fstream file("example.pcap");
-    cout << "Current working directory: " << filesystem::current_path() << endl;
-    if (!file) {
-        cerr << "Error: Could not create file" << endl;
-        return 1;
+    // fstream file("output.pcap", ios::out | ios::binary);
+    // if (!file) {
+    //     cerr << "Error: Could not create file" << endl;
+    //     return 1;
+    // }
+    //file.close();
+    PcapParser parser("output.pcap"); 
+    vector<PacketRecord> readPackets; 
+    readPackets=parser.readPcapFile();
+    cout << "PCAP file elements" << endl;
+
+  for (size_t i = 0; i < readPackets.size(); i++) 
+  {
+    cout << "Packet " << i+1 << ": ";
+    cout << "ts=" << dec << readPackets[i].getTimeStamp().getSeconds() << ".";
+    cout << readPackets[i].getTimeStamp().getAccuracy() << " ";
+    cout << "len=" << dec << readPackets[i].getLength() << endl;
+    cout << "Data: ";
+    for (size_t j = 0; j < readPackets[i].getLength(); j++) {
+        cout << hex << setw(2) << setfill('0')
+             << (unsigned int)(unsigned char)readPackets[i].getData()[j] << " ";
     }
-    PcapParser parser(PcapParser::micro ,"example.pcap",true);
-    parser.writePacket(p1);
-    
+    cout << dec << endl << endl; // reset back to decimal
+  }
+  cout << __LINE__ << endl;
+
+    //parser.writePacket(p1);    
 }
