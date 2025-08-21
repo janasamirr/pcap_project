@@ -47,28 +47,31 @@ void PcapParser::writePacket(const PacketRecord& p) {
 vector<PacketRecord> PcapParser::readPcapFile()
 {
     vector<PacketRecord> packets;
-    fileStream.seekg(24, ios::beg);
-    cout << fileStream.eof() << endl;
-    cout << fileStream.good() << endl; // skip global header
-    cout << fileStream.tellg() << endl;
-
+    // Read file header
+    fileStream.read(reinterpret_cast<char*>(&magicNumber), sizeof(magicNumber));
+    if (!fileStream) {
+        cerr << "Failed to read PCAP magic number" << endl;
+        return packets;
+    }
+    if(magicNumber==0xa1b2c3d4)
+    {
+        type = micro;
+        isLittleEndian=true;
+    }
+    else if(magicNumber==0xA1B23C4D)
+    {
+        type= nano;
+        isLittleEndian=true;
+    }
+    fileStream.seekg(20, ios::cur);
     while (fileStream.good()) {
         uint32_t ts_sec, ts_accuracy, cap_len, orig_len;
         // Read packet header
-        fileStream.read(reinterpret_cast<char*>(&ts_sec), sizeof(ts_sec));
-        cout << fileStream.eof() << endl;
-        cout << __LINE__ << endl;
+        if (!fileStream.read(reinterpret_cast<char*>(&ts_sec), sizeof(ts_sec))) break;
         if (!fileStream.read(reinterpret_cast<char*>(&ts_accuracy), sizeof(ts_accuracy))) break;
         if (!fileStream.read(reinterpret_cast<char*>(&cap_len), sizeof(cap_len))) break;
         if (!fileStream.read(reinterpret_cast<char*>(&orig_len), sizeof(orig_len))) break;
-        cout << __LINE__ << endl;
-
-        cout << "Read packet header: ts=" << ts_sec << " len=" << cap_len << endl;
-        if (cap_len > 65535) {
-            cerr << "Invalid cap_len=" << cap_len << endl;
-            break;
-        }
-
+        
         char* buffer = new char[cap_len];
         if (!fileStream.read(buffer, cap_len)) {
             cerr << "Unexpected end of file\n";
@@ -78,7 +81,7 @@ vector<PacketRecord> PcapParser::readPcapFile()
         TimeStamp ts(ts_sec, ts_accuracy);
         PacketRecord packet(ts, cap_len, buffer); 
         packets.push_back(packet);
-
+        delete [] buffer;
         cout << "Packet pushed back, size=" << packets.size() << endl;
     }
 
@@ -86,34 +89,7 @@ vector<PacketRecord> PcapParser::readPcapFile()
     return packets;
 }
 
-/* vector<PacketRecord> PcapParser::readPcapFile()
+PcapParser::TimeStampType PcapParser:: getTimeStampType()
 {
-    vector<PacketRecord> packets;
-    fileStream.seekg(24, ios::beg);
-    while(!fileStream.eof())
-    {
-        uint32_t ts_sec, ts_accuracy, cap_len, orig_len;
-        fileStream.read(reinterpret_cast<char*>(&ts_sec), sizeof(ts_sec));
-        cout<<"read time stamp";
-        fileStream.read(reinterpret_cast<char*>(&ts_accuracy), sizeof(ts_accuracy));
-        fileStream.read(reinterpret_cast<char*>(&cap_len), sizeof(cap_len));
-        fileStream.read(reinterpret_cast<char*>(&orig_len), sizeof(orig_len));
-        cout<<"read original length";
-        //if (!fileStream) break;
-        char* buffer = new char[cap_len]; //Allocate a raw buffer for the packet payload (size = incl_len).
-        fileStream.read(buffer,cap_len);
-        if(!fileStream)
-        {
-            delete[] buffer; 
-            break; 
-        } 
-        TimeStamp ts(ts_sec, ts_accuracy);
-        PacketRecord packet(ts,cap_len, buffer);
-        packets.push_back(packet);
-        cout<<"packet is pushed back";
-        delete[] buffer;
-    }
-    fileStream.close();
-    return packets;
-} */
-
+    return type;
+}

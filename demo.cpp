@@ -43,7 +43,10 @@ int main()
     }
     cout << dec << endl << endl; // reset back to decimal
   }
-  cout << __LINE__ << endl;
+  PcapParser::TimeStampType ts=parser.getTimeStampType();
+  if(ts==PcapParser::TimeStampType::micro)
+  cout<<"Time Stamp record in displayed in seconds and micro seconds";
+  else cout<<"TimeStamp record is displayed in seconds and nano seconds";
 
     //parser.writePacket(p1);    
 }

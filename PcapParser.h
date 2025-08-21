@@ -28,6 +28,8 @@ class PcapParser {
         PcapParser(string fileName);
         void writePacket(const PacketRecord& p);
         vector<PacketRecord> readPcapFile();
+        void setTimeStampType(uint32_t magicNumber);
+        TimeStampType getTimeStampType();        
 };
 
 
