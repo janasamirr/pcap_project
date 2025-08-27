@@ -18,14 +18,14 @@ int main()
 
     PacketRecord p1( ts1,sizeof(data1), (char*)data1);
     PacketRecord p2( ts2,sizeof(data2), (char*)data2);
-    vector<PacketRecord> originalPackets = {p1, p2};
+    //vector<PacketRecord> originalPackets = {p1, p2};
     // fstream file("output.pcap", ios::out | ios::binary);
     // if (!file) {
     //     cerr << "Error: Could not create file" << endl;
     //     return 1;
     // }
     //file.close();
-    PcapParser parser("output.pcap"); 
+    PcapParser parser("nlmon-big.pcap"); 
     vector<PacketRecord> readPackets; 
     readPackets=parser.readPcapFile();
     cout << "PCAP file elements" << endl;
@@ -43,7 +43,6 @@ int main()
     }
     cout << dec << endl << endl; // reset back to decimal
   }
-  cout << __LINE__ << endl;
 
     //parser.writePacket(p1);    
 }

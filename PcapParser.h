@@ -1,6 +1,7 @@
 #include <fstream>
 #include <string>
 #include <cstdint>
+#include <iomanip>
 #include "PacketRecord.h"
 #include "TimeStamp.h"
 
@@ -28,6 +29,7 @@ class PcapParser {
         PcapParser(string fileName);
         void writePacket(const PacketRecord& p);
         vector<PacketRecord> readPcapFile();
+        bool checkLittleEndian(uint32_t magicNumber);
 };
 
 
