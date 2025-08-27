@@ -78,6 +78,7 @@ vector<PacketRecord> PcapParser::readPcapFile()
     uint32_t ts_sec, ts_accuracy, cap_len, orig_len;
     if(checkLittleEndian(magicNumber))
     {
+    char* buffer;
     while (fileStream.good()) {
         
         // Read packet header
@@ -93,7 +94,7 @@ vector<PacketRecord> PcapParser::readPcapFile()
         cout << "captured packet length = "<< cap_len <<endl;
         
 
-        char* buffer = new char[cap_len];
+        buffer = new char[cap_len];
         if (!fileStream.read(buffer, cap_len)) {
             cerr << "Unexpected end of file\n";
             break;
@@ -105,7 +106,10 @@ vector<PacketRecord> PcapParser::readPcapFile()
         
         cout << "Packet pushed back, size=" << packets.size() << endl;
     }
+
     fileStream.close();
+    delete[] buffer;
+    buffer=nullptr;
     return packets;
     }
     else if (!checkLittleEndian(magicNumber))
@@ -141,7 +145,6 @@ vector<PacketRecord> PcapParser::readPcapFile()
             TimeStamp ts(ts_sec, ts_accuracy);
             PacketRecord packet(ts, cap_len, buffer); 
             packets.push_back(packet);   
-            
             cout << "Packet pushed back, size=" << packets.size() << endl;
         }
         fileStream.close();
