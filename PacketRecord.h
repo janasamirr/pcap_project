@@ -15,8 +15,7 @@ class PacketRecord
         char* packetData;
         int dataLength;
 
-    public:
-    
+    public:    
         PacketRecord(TimeStamp ts,uint32_t length ,char* data);
         TimeStamp getTimeStamp() const;
         uint32_t getLength() const;
